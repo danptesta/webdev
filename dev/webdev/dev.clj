@@ -3,5 +3,5 @@
             [ring.middleware.reload :refer [wrap-reload]]
             [webdev.core :as core]))
 
-(defn -dev-main [port]
+(defn -main [port]
   (jetty/run-jetty (wrap-reload #'core/app) {:port (Integer. port)}))

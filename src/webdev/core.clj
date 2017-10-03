@@ -1,8 +1,7 @@
 (ns webdev.core
   (:require [ring.adapter.jetty :as jetty]
-            [ring.middleware.reload :refer [wrap-reload]]
             [compojure.core :refer [defroutes GET]]
-            [compujure.core :refer [not-found]]
+            [compojure.route :refer [not-found]]
             [ring.handler.dump :refer [handle-dump]]))
 
 (defn greet [req]
@@ -17,7 +16,8 @@
 
 (defn about [req]
   {:status 200
-   :body "This is a cool clojure app developed by Dan Testa."})
+   :body "This is a cool clojure app developed by Dan Testa."
+   :headers {}})
 
 (defn yo [req]
   (let [name (get-in req [:route-params :name])]
@@ -31,9 +31,9 @@
    ":" /})
 
 (defn calc [req]
-  (let [x ((Integer. get-in req [:route-params :x]))
+  (let [x (Integer. (get-in req [:route-params :x]))
         op (get-in req [:route-params :op])
-        y ((Integer.  get-in req [:route-params :y]))
+        y (Integer. (get-in req [:route-params :y]))
         f (get ops op)]
     (if f
       {:status 200
@@ -50,7 +50,7 @@
   (GET "/request" [] handle-dump)
   (GET "/yo/:name" [] yo)
   (GET "/calc/:x/:op/:y" [] calc)
-  (notfound "Page not found."))
+  (not-found "Page not found."))
 
 (defn -main [port]
   (jetty/run-jetty app                 {:port (Integer. port)}))
