@@ -22,7 +22,8 @@
 (defn yo [req]
   (let [name (get-in req [:route-params :name])]
     {:status 200
-     :body (str "Yo! " name "!")}))
+     :body (str "Yo! " name "!")
+     :headers {}}))
 
 (def ops
   {"+" +
